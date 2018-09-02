@@ -1,0 +1,27 @@
+1.) find ./Negative_Images -name '*.ppm' >negatives.dat
+    find ./Positive_Images -name '*.png' >positives.dat
+
+2.) perl createtrainsamples.pl positives.dat negatives.dat samples 250 
+"./opencv_createsamples  -bgcolor 0 -bgthresh 0 -maxxangle 1.1 
+-maxyangle 1.1 maxzangle 0.5 -maxidev 40 
+
+
+
+3.) find samples/ -name '*.vec' > samples.dat
+
+4.) ./mergevec samples.dat samples.vec
+
+5.)  opencv_haartraining -data haarcascade -vec samples.vec -bg 
+negatives.dat -nstages 20 -nsplits 2 
+-minhitrate 0.999 -maxfalsealarm 0.5 
+-npos 250 -nneg 99 -w 160 -h 20 -nonsym -mem 2048 -mode ALL
+
+6.) This should have created the xml classifier for tata nano car,but I was
+    stuck on step 4,getting the following error-
+    "cannot find file or directory- mergevec
+
+7.) I even tried running these commands on ubuntu on cloud9,but this 
+    didn't work
+ 
+
+

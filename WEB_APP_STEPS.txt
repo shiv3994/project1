@@ -1,0 +1,61 @@
+
+1.)  Created a folder within my workspace on Cloud9, named it <cgi-bin>
+2.)  Within the <cgi-bin> folder, uploaded the file <new.py>
+3.)  Once I uploaded the file I wanted to serve, I started up the Apache web server-by creating a new runner 
+     and the selected- Apache httpd (PHP, HTML)
+4.)  Clicked on the Run button and the apache server was ready to go.
+5.)  Enabled the CGI mode by typing the following within the Terminal- sudo a2enmod cgi
+6.)  Told Apache where my CGI files were present by doing the following- sudo vi /etc/apache2/conf-available/serve-cgi-bin.conf
+
+7.) The file read something like this:
+
+<IfModule mod_alias.c>
+        <IfModule mod_cgi.c>
+                Define ENABLE_USR_LIB_CGI_BIN
+        </IfModule>
+
+        <IfModule mod_cgid.c>
+                Define ENABLE_USR_LIB_CGI_BIN
+        </IfModule>
+
+        <IfDefine ENABLE_USR_LIB_CGI_BIN>
+                ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+                <Directory "/usr/lib/cgi-bin">
+                        AllowOverride None
+                        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+                        Require all granted
+                </Directory>
+        </IfDefine>
+</IfModule>
+
+8.) Modified the following section 
+                 from:
+
+<IfDefine ENABLE_USR_LIB_CGI_BIN>
+    ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+    <Directory "/usr/lib/cgi-bin">
+        AllowOverride None
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Require all granted
+    </Directory>
+</IfDefine>
+
+                   to:
+
+<IfDefine ENABLE_USR_LIB_CGI_BIN>
+    ScriptAlias /cgi-bin/ /home/ubuntu/workspace/cgi-bin/
+    <Directory "/home/ubuntu/workspace/cgi-bin">
+        AllowOverride None
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        AddHandler cgi-script .cgi .py
+        Require all granted
+    </Directory>
+</IfDefine>
+
+9.) Saved this file and restarted the  Apache.
+
+10.) But I got one error after this- 403 permission denied cannot acces cgi-bin folder.
+     I tried changing the permissions of this folder using chmod but it didn't work.
+     That is why I couldnt create the web app.
+
+
